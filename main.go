@@ -2,9 +2,9 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"os"
 
+	"github.com/KarlMathuthu/taskify-go/routes"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,17 +20,9 @@ func main() {
 	// Create a new gin instance.
 	router := gin.Default()
 
-	router.GET("/api/", func(ctx *gin.Context) {
-		ctx.Header("Content-Type", "application/json")
-
-		type Response struct {
-			Message string `json:"message"`
-		}
-		message := Response{
-			Message: "Welcome to Gin!",
-		}
-		ctx.JSON(http.StatusOK, message)
-	})
+	// API Routes
+	router.GET("/tasks/", routes.GetAllTasks)
+	router.POST("/tasks/", routes.AddTask)
 
 	// Run gin, also catch the error, if it's there then log.Fatal(err)
 	err := router.Run(":" + port)

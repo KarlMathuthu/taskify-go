@@ -22,5 +22,17 @@ func GetAllTasks(ctx *gin.Context) {
 }
 
 // Create task
+func AddTask(ctx *gin.Context) {
+	ctx.Header("Content-Type", "application/json")
+	task := models.Task{
+		ID:          "1",
+		Title:       "Hello!",
+		Description: "Nothing",
+		IsDone:      false,
+	}
+	tasks = append(tasks, task)
+	ctx.JSON(http.StatusOK, task)
+}
+
 // Update task
 // Delete task
