@@ -10,6 +10,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// Welcome
+
+func Welcome(ctx *gin.Context) {
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusOK, gin.H{"message": "Hi, Welcome to Taskify!"})
+}
+
 // Get tasks
 func GetAllTasks(ctx *gin.Context) {
 	// Set a custom header
