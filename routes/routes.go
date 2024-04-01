@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/KarlMathuthu/taskify-go/database"
 	"github.com/KarlMathuthu/taskify-go/models"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -38,8 +39,9 @@ func AddTask(ctx *gin.Context) {
 		}
 		ctx.JSON(http.StatusBadRequest, response)
 	}
-	tasks = append(tasks, task)
-	ctx.JSON(http.StatusCreated, task)
+	result := database.AddTaskToDB(task)
+
+	ctx.JSON(http.StatusCreated, result)
 }
 
 // Find the task with the ID
