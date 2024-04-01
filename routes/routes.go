@@ -24,11 +24,13 @@ func GetAllTasks(ctx *gin.Context) {
 // Create task
 func AddTask(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
-	task := models.Task{
-		ID:          "1",
-		Title:       "Hello!",
-		Description: "Nothing",
-		IsDone:      false,
+	var task models.Task
+
+	if err := ctx.BindJSON(task); err != nil {
+		response := models.Response{
+			Message: err.Error(),
+		}
+		ctx.JSON(http.StatusBadRequest, response)
 	}
 	tasks = append(tasks, task)
 	ctx.JSON(http.StatusOK, task)
