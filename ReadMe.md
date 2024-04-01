@@ -1,6 +1,6 @@
-# Task-Go
+# Taskify-Go
 
-Task-Go is a beginner-friendly project aimed at providing a platform for GoLang enthusiasts to test and improve their skills. It's a simple task manager application developed entirely in Go, offering a hands-on experience for beginners to dive into GoLang development.
+Taskify is a beginner-friendly project aimed at providing a platform for GoLang enthusiasts to test and improve their skills. It's a simple task manager application developed entirely in Go, offering a hands-on experience for beginners to dive into GoLang development.
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@ Task-Go is a beginner-friendly project aimed at providing a platform for GoLang 
 
 ## Introduction
 
-Task-Go is designed to be a simple yet functional task manager application. It allows users to add, list, update, and remove tasks from their list. The project is structured in a beginner-friendly manner, making it easy for those new to GoLang to understand and contribute.
+Taskify is designed to be a simple yet functional task manager application. It allows users to add, list, update, and remove tasks from their list. The project is structured in a beginner-friendly manner, making it easy for those new to GoLang to understand and contribute.
 
 ## Features
 
@@ -24,19 +24,19 @@ Task-Go is designed to be a simple yet functional task manager application. It a
 
 ## Installation
 
-To get started with Task-Go, follow these simple steps:
+To get started with Taskify, follow these simple steps:
 
 1. Ensure you have Go installed on your system. If not, you can download and install it from the [official GoLang website](https://golang.org/).
 2. Clone this repository to your local machine:
 
     ```bash
-    git clone https://github.com/your-username/task-go.git
+    git clone https://github.com/KarlMathuthu/taskify-go.git
     ```
 
 3. Navigate to the project directory:
 
     ```bash
-    cd task-go
+    cd Taskify
     ```
 
 4. Build the project:
@@ -48,7 +48,7 @@ To get started with Task-Go, follow these simple steps:
 5. Run the executable:
 
     ```bash
-    ./task-go
+    ./Taskify
     ```
 
 ## Usage
@@ -69,7 +69,7 @@ Example usage:
 
 ## Contributing
 
-Contributions to Task-Go are welcome! Whether you're a beginner looking to improve your GoLang skills or an experienced developer wanting to support beginners, there are many ways to contribute:
+Contributions to Taskify are welcome! Whether you're a beginner looking to improve your GoLang skills or an experienced developer wanting to support beginners, there are many ways to contribute:
 
 - **Bug Fixes**: Find and fix bugs within the application.
 - **Feature Implementation**: Add new features to enhance the functionality of the task manager.
@@ -81,6 +81,6 @@ To contribute, fork this repository, make your changes, and submit a pull reques
 
 ## Owner
 
-Task-Go is owned by Karl Mathuthu
+Taskify is owned by Karl Mathuthu
 
 ---
