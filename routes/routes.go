@@ -5,6 +5,7 @@ import (
 
 	"github.com/KarlMathuthu/taskify-go/models"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 // slice where we store our tasks
@@ -25,8 +26,9 @@ func GetAllTasks(ctx *gin.Context) {
 func AddTask(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
 	var task models.Task
+	task.ID = uuid.NewString()
 
-	if err := ctx.BindJSON(task); err != nil {
+	if err := ctx.BindJSON(&task); err != nil {
 		response := models.Response{
 			Message: err.Error(),
 		}
