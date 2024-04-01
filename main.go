@@ -33,6 +33,7 @@ func main() {
 	router.POST("/tasks/", controllers.AddTask)
 	router.GET("/tasks/:id", controllers.GetEachTask)
 	router.PUT("/tasks/:id", controllers.UpdateTask)
+	router.PATCH("/tasks/:id", controllers.UpdateIsDoneField)
 	router.DELETE("/tasks/:id", controllers.DeleteTask)
 
 	// Run gin, also catch the error, if it's there then log.Fatal(err)

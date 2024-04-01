@@ -10,12 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// slice where we store our tasks
-// var, name, type and value
-var tasks []models.Task
-
-// CRUD Functions.
-
 // Get tasks
 func GetAllTasks(ctx *gin.Context) {
 	// Set a custom header
@@ -50,16 +44,6 @@ func AddTask(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, response)
 }
 
-// Find the task id as int
-func FindTaskID(id string) *int {
-	for i, t := range tasks {
-		if t.TaskId == id {
-			return &i
-		}
-	}
-	return nil
-}
-
 // Get Each Task
 func GetEachTask(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
@@ -79,7 +63,6 @@ func UpdateTask(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
 	// Get task ID from the Params
 	taskId := ctx.Param("id")
-	taskIntId := FindTaskID(taskId)
 	var newTask models.Task
 
 	newTask.TaskId = taskId
@@ -90,9 +73,39 @@ func UpdateTask(ctx *gin.Context) {
 		}
 		ctx.JSON(http.StatusBadRequest, response)
 	}
+	result, err := database.UpdateTaskDB(taskId, newTask)
 
-	tasks[*taskIntId] = newTask
-	ctx.JSON(http.StatusOK, newTask)
+	if err != nil {
+		response := models.Response{
+			Message: err.Error(),
+		}
+		ctx.JSON(http.StatusBadRequest, response)
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": result})
+}
+
+// Update is done field
+func UpdateIsDoneField(ctx *gin.Context) {
+	// set custom headers
+	ctx.Header("Content-Type", "application/json")
+	taskId := ctx.Param("id")
+	var newTask models.Task
+
+	if err := ctx.BindJSON(&newTask); err != nil {
+		response := models.Response{
+			Message: err.Error(),
+		}
+		ctx.JSON(http.StatusBadRequest, response)
+	}
+	result, err := database.UpdateTaskDone(taskId, newTask)
+	if err != nil {
+		response := models.Response{
+			Message: err.Error(),
+		}
+		ctx.JSON(http.StatusBadRequest, response)
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": result})
 }
 
 // Delete task

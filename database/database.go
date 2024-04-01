@@ -65,7 +65,6 @@ func AddTaskToDB(task models.Task) (insertResult interface{}) {
 }
 
 // Find Task
-
 func FindTaskDB(id string) (*models.Task, error) {
 	myTask := MongoCollection.FindOne(context.TODO(), bson.M{"id": id})
 	var taskModel models.Task
@@ -78,7 +77,7 @@ func FindTaskDB(id string) (*models.Task, error) {
 	if err := myTask.Err(); err != nil {
 		return nil, err
 	}
-	return &taskModel, nil
+	return &taskModel, err
 }
 
 // Delete Task
@@ -88,3 +87,18 @@ func DeleteTaskDB(id string) (*mongo.DeleteResult, error) {
 }
 
 // Update Task
+func UpdateTaskDB(id string, updatedTask models.Task) (*mongo.UpdateResult, error) {
+	update := bson.M{"$set": bson.M{
+		"title":       updatedTask.Title,
+		"description": updatedTask.Description,
+	}}
+	updateResult, err := MongoCollection.UpdateOne(context.TODO(), bson.M{"id": id}, update)
+	return updateResult, err
+}
+
+// Toggle the isDone field
+func UpdateTaskDone(id string, updatedTask models.Task) (*mongo.UpdateResult, error) {
+	update := bson.M{"$set": bson.M{"isDone": updatedTask.IsDone}}
+	updateResult, err := MongoCollection.UpdateOne(context.TODO(), bson.M{"id": id}, update)
+	return updateResult, err
+}
