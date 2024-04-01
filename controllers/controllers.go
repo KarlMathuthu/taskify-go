@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/KarlMathuthu/taskify-go/database"
 	"github.com/KarlMathuthu/taskify-go/models"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // slice where we store our tasks
@@ -20,8 +20,9 @@ var tasks []models.Task
 func GetAllTasks(ctx *gin.Context) {
 	// Set a custom header
 	ctx.Header("Content-Type", "application/json")
-	// Get all tasks in the slice "tasks"
-	ctx.JSON(http.StatusOK, tasks)
+	myTasks := database.GetAllTasksDB()
+	// Get all tasks from the database.
+	ctx.JSON(http.StatusOK, myTasks)
 }
 
 // Create task
@@ -30,8 +31,10 @@ func AddTask(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
 	// Get an instance of Task Model
 	var task models.Task
-	// Asign task ID to the UUID.
-	task.ID = uuid.NewString()
+	// make ID the doc Object ID.
+	task.ID = primitive.NewObjectID()
+	// make the taskId the same as the above ID.
+	task.TaskId = task.ID.Hex()
 
 	if err := ctx.BindJSON(&task); err != nil {
 		response := models.Response{
@@ -40,24 +43,17 @@ func AddTask(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, response)
 	}
 	result := database.AddTaskToDB(task)
-
-	ctx.JSON(http.StatusCreated, result)
-}
-
-// Find the task with the ID
-func FindTask(id string) (*models.Task, error) {
-	for i, t := range tasks {
-		if t.ID == id {
-			return &tasks[i], nil
-		}
+	response := bson.M{
+		"message": result,
 	}
-	return nil, errors.New("task Not found")
+
+	ctx.JSON(http.StatusCreated, response)
 }
 
 // Find the task id as int
 func FindTaskID(id string) *int {
 	for i, t := range tasks {
-		if t.ID == id {
+		if t.TaskId == id {
 			return &i
 		}
 	}
@@ -68,12 +64,13 @@ func FindTaskID(id string) *int {
 func GetEachTask(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
 	taskId := ctx.Param("id")
-	task, err := FindTask(taskId)
-
+	task, err := database.FindTaskDB(taskId)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, err)
+		response := models.Response{
+			Message: "task Not Found",
+		}
+		ctx.JSON(http.StatusNotFound, response)
 	}
-
 	ctx.JSON(http.StatusOK, task)
 }
 
@@ -85,7 +82,7 @@ func UpdateTask(ctx *gin.Context) {
 	taskIntId := FindTaskID(taskId)
 	var newTask models.Task
 
-	newTask.ID = taskId
+	newTask.TaskId = taskId
 
 	if err := ctx.BindJSON(&newTask); err != nil {
 		response := models.Response{
@@ -98,17 +95,18 @@ func UpdateTask(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, newTask)
 }
 
-// Remove Task from slice
-func RemoveTask(slice []models.Task, index int) []models.Task {
-	return append(slice[:index], slice[index+1:]...)
-}
-
 // Delete task
 func DeleteTask(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
 	taskId := ctx.Param("id")
-	taskIndex := FindTaskID(taskId)
-	newTasks := RemoveTask(tasks, *taskIndex)
 
-	ctx.JSON(http.StatusOK, newTasks)
+	result, err := database.DeleteTaskDB(taskId)
+
+	if err != nil {
+		response := models.Response{
+			Message: err.Error(),
+		}
+		ctx.JSON(http.StatusInternalServerError, response)
+	}
+	ctx.JSON(http.StatusOK, bson.M{"message": result})
 }
