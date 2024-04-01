@@ -4,21 +4,29 @@ import (
 	"log"
 	"os"
 
+	"github.com/KarlMathuthu/taskify-go/database"
 	"github.com/KarlMathuthu/taskify-go/routes"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 
-	// Get the port from .env file, if it's not there then set PORT to 8080
+	// Get the port & dbUrl from .env file, Handle errors.
 	port := os.Getenv("PORT")
+	dbUrl := os.Getenv("DBURL")
 
+	if dbUrl == "" {
+		dbUrl = "mongodb://localhost:27017"
+	}
 	if port == "" {
 		port = "8080"
 	}
 
 	// Create a new gin instance.
 	router := gin.Default()
+
+	// Init MongoDB.
+	database.MongoDBInit(dbUrl)
 
 	// API Routes
 	router.GET("/tasks/", routes.GetAllTasks)
