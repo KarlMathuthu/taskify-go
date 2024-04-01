@@ -23,6 +23,7 @@ func main() {
 	// API Routes
 	router.GET("/tasks/", routes.GetAllTasks)
 	router.POST("/tasks/", routes.AddTask)
+	router.GET("/tasks/:id", routes.GetEachTask)
 
 	// Run gin, also catch the error, if it's there then log.Fatal(err)
 	err := router.Run(":" + port)
