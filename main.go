@@ -24,6 +24,8 @@ func main() {
 	router.GET("/tasks/", routes.GetAllTasks)
 	router.POST("/tasks/", routes.AddTask)
 	router.GET("/tasks/:id", routes.GetEachTask)
+	router.PUT("/tasks/:id", routes.UpdateTask)
+	router.DELETE("/tasks/:id", routes.DeleteTask)
 
 	// Run gin, also catch the error, if it's there then log.Fatal(err)
 	err := router.Run(":" + port)

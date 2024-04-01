@@ -52,20 +52,61 @@ func FindTask(id string) (*models.Task, error) {
 	return nil, errors.New("task Not found")
 }
 
+// Find the task id as int
+func FindTaskID(id string) *int {
+	for i, t := range tasks {
+		if t.ID == id {
+			return &i
+		}
+	}
+	return nil
+}
+
 // Get Each Task
 func GetEachTask(ctx *gin.Context) {
+	ctx.Header("Content-Type", "application/json")
 	taskId := ctx.Param("id")
 	task, err := FindTask(taskId)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusNotFound, err)
 	}
 
 	ctx.JSON(http.StatusOK, task)
 }
 
 // Update task
-func UpdateTask(ctx *gin.Context) {}
+func UpdateTask(ctx *gin.Context) {
+	ctx.Header("Content-Type", "application/json")
+	// Get task ID from the Params
+	taskId := ctx.Param("id")
+	taskIntId := FindTaskID(taskId)
+	var newTask models.Task
+
+	newTask.ID = taskId
+
+	if err := ctx.BindJSON(&newTask); err != nil {
+		response := models.Response{
+			Message: err.Error(),
+		}
+		ctx.JSON(http.StatusBadRequest, response)
+	}
+
+	tasks[*taskIntId] = newTask
+	ctx.JSON(http.StatusOK, newTask)
+}
+
+// Remove Task from slice
+func RemoveTask(slice []models.Task, index int) []models.Task {
+	return append(slice[:index], slice[index+1:]...)
+}
 
 // Delete task
-func DeleteTask() {}
+func DeleteTask(ctx *gin.Context) {
+	ctx.Header("Content-Type", "application/json")
+	taskId := ctx.Param("id")
+	taskIndex := FindTaskID(taskId)
+	newTasks := RemoveTask(tasks, *taskIndex)
+
+	ctx.JSON(http.StatusOK, newTasks)
+}
