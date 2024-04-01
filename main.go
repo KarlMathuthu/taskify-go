@@ -29,7 +29,7 @@ func main() {
 	database.MongoDBInit(dbUrl)
 
 	// API Routes
-	router.GET("/welcome", controllers.Welcome)
+	router.GET("/", controllers.Welcome)
 	router.GET("/tasks/", controllers.GetAllTasks)
 	router.POST("/tasks/", controllers.AddTask)
 	router.GET("/tasks/:id", controllers.GetEachTask)
