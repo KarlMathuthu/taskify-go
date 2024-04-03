@@ -26,7 +26,7 @@ Taskify is designed to be a simple yet functional task manager application. It a
 
 To get started with Taskify, follow these simple steps:
 
-1. Ensure you have Go installed on your system. If not, you can download and install it from the [official GoLang website](https://golang.org/).
+1. Ensure you have Go installed on your system. If not, you can download and install it from the [official GoLang website](https://go.dev/).
 2. Clone this repository to your local machine:
 
     ```bash
