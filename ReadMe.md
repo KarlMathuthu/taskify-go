@@ -79,8 +79,6 @@ Contributions to Taskify are welcome! Whether you're a beginner looking to impro
 
 To contribute, fork this repository, make your changes, and submit a pull request. Your contributions will be greatly appreciated!
 
-## Owner
-
-Taskify is owned by Karl Mathuthu
+Developed with ❤️ by Karl Kiyotaka.
 
 ---
