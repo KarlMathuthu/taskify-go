@@ -51,7 +51,7 @@ To get started with Taskify, follow these simple steps:
     ./Taskify
     ```
 
-## Usage.
+## Usage
 
 Once the application is running, you can interact with it using the following endpoints:
 
