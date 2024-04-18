@@ -6,6 +6,7 @@ import (
 
 	"github.com/KarlMathuthu/taskify-go/controllers"
 	"github.com/KarlMathuthu/taskify-go/database"
+	"github.com/KarlMathuthu/taskify-go/routers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,14 +29,8 @@ func main() {
 	// Init MongoDB.
 	database.MongoDBInit(dbUrl)
 
-	// API Routes
-	router.GET("/", controllers.Welcome)
-	router.GET("/tasks/", controllers.GetAllTasks)
-	router.POST("/tasks/", controllers.AddTask)
-	router.GET("/tasks/:id", controllers.GetEachTask)
-	router.PUT("/tasks/:id", controllers.UpdateTask)
-	router.PATCH("/tasks/:id", controllers.UpdateIsDoneField)
-	router.DELETE("/tasks/:id", controllers.DeleteTask)
+	// API Routes from routes package
+	routers.TasksRoutes(router)
 
 	// Run gin, also catch the error, if it's there then log.Fatal(err)
 	err := router.Run(":" + port)
