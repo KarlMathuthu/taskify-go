@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/KarlMathuthu/taskify-go/database"
 	"github.com/KarlMathuthu/taskify-go/models"
+	"github.com/KarlMathuthu/taskify-go/services"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -19,7 +19,7 @@ func Welcome(ctx *gin.Context) {
 func GetAllTasks(ctx *gin.Context) {
 	// Set a custom header
 	ctx.Header("Content-Type", "application/json")
-	myTasks := database.GetAllTasksDB()
+	myTasks := services.GetAllTasksDB()
 	// Get all tasks from the database.
 	ctx.JSON(http.StatusOK, myTasks)
 }
@@ -41,7 +41,7 @@ func AddTask(ctx *gin.Context) {
 		}
 		ctx.JSON(http.StatusBadRequest, response)
 	}
-	result := database.AddTaskToDB(task)
+	result := services.AddTaskToDB(task)
 	response := bson.M{
 		"message": result,
 	}
@@ -53,7 +53,7 @@ func AddTask(ctx *gin.Context) {
 func GetEachTask(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
 	taskId := ctx.Param("id")
-	task, err := database.FindTaskDB(taskId)
+	task, err := services.FindTaskDB(taskId)
 	if err != nil {
 		response := models.Response{
 			Message: "task Not Found",
@@ -78,7 +78,7 @@ func UpdateTask(ctx *gin.Context) {
 		}
 		ctx.JSON(http.StatusBadRequest, response)
 	}
-	result, err := database.UpdateTaskDB(taskId, newTask)
+	result, err := services.UpdateTaskDB(taskId, newTask)
 
 	if err != nil {
 		response := models.Response{
@@ -103,7 +103,7 @@ func UpdateIsDoneField(ctx *gin.Context) {
 		}
 		ctx.JSON(http.StatusBadRequest, response)
 	}
-	result, err := database.UpdateTaskDone(taskId, newTask)
+	result, err := services.UpdateTaskDone(taskId, newTask)
 	if err != nil {
 		response := models.Response{
 			Message: err.Error(),
@@ -118,7 +118,7 @@ func DeleteTask(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
 	taskId := ctx.Param("id")
 
-	result, err := database.DeleteTaskDB(taskId)
+	result, err := services.DeleteTaskDB(taskId)
 
 	if err != nil {
 		response := models.Response{
